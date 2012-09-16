@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>A default implementation of {@link ServiceManager} class.</p>
@@ -76,7 +77,7 @@ public class ServiceManagerImpl implements ServiceManager {
     /**
      * <p>Represents a map of configured services.</p>
      */
-    private final Map<String, Service> serviceMap = new HashMap<String, Service>();
+    private final Map<String, Service> serviceMap = new ConcurrentHashMap<String, Service>();
 
     /**
      * <p>Creates new instance of {@link ServiceManagerImpl} class.</p>
@@ -109,7 +110,7 @@ public class ServiceManagerImpl implements ServiceManager {
             // retrieves the service
             ServiceConfigurationDTO serviceConfigurationDTO = serviceConfigurationService.get(serviceId);
 
-            if(serviceConfigurationDTO == null) {
+            if (serviceConfigurationDTO == null) {
 
                 throw new ServiceExecutionException("Could not configure the service.");
             }
@@ -279,6 +280,9 @@ public class ServiceManagerImpl implements ServiceManager {
         byte[] keyStoreData;
         KeyStoreDTO keyStoreDTO;
 
+        char[] keyStorePassword = null;
+        char[] keyPassword = null;
+
         if (securityTypeId == ModelConsts.SecurityTypes.WS_PASSWORD ||
                 securityTypeId == ModelConsts.SecurityTypes.WS_DIGEST) {
 
@@ -288,15 +292,29 @@ public class ServiceManagerImpl implements ServiceManager {
             keyStoreDTO = keyStoreService.get(serviceSecurity.getKeyStoreId());
             keyStoreData = keyStoreService.getContent(serviceSecurity.getKeyStoreId());
 
-            return new XwssSignatureCallback(keyStoreData, keyStoreDTO.getKeyStorePassword().toCharArray(),
-                    keyStoreDTO.getKeyPassword().toCharArray());
+            if(keyStoreDTO.getKeyStorePassword() != null && !keyStoreDTO.getKeyStorePassword().isEmpty()) {
+                keyStorePassword = keyStoreDTO.getKeyStorePassword().toCharArray();
+            }
+
+            if(keyStoreDTO.getKeyPassword() != null && !keyStoreDTO.getKeyPassword().isEmpty()) {
+                keyPassword = keyStoreDTO.getKeyPassword().toCharArray();
+            }
+
+            return new XwssSignatureCallback(keyStoreData, keyStorePassword, keyPassword);
         } else if (securityTypeId == ModelConsts.SecurityTypes.WS_ENCRYPTION) {
 
             keyStoreDTO = keyStoreService.get(serviceSecurity.getKeyStoreId());
             keyStoreData = keyStoreService.getContent(serviceSecurity.getKeyStoreId());
 
-            return new XwssEncryptionCallback(keyStoreData, keyStoreDTO.getKeyStorePassword().toCharArray(),
-                    keyStoreDTO.getKeyPassword().toCharArray());
+            if(keyStoreDTO.getKeyStorePassword() != null && !keyStoreDTO.getKeyStorePassword().isEmpty()) {
+                keyStorePassword = keyStoreDTO.getKeyStorePassword().toCharArray();
+            }
+
+            if(keyStoreDTO.getKeyPassword() != null && !keyStoreDTO.getKeyPassword().isEmpty()) {
+                keyPassword = keyStoreDTO.getKeyPassword().toCharArray();
+            }
+
+            return new XwssEncryptionCallback(keyStoreData, keyStorePassword, keyPassword);
         }
 
         throw new ServiceExecutionException("The given security configuration is not supported.");

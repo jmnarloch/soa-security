@@ -123,6 +123,10 @@
 
         jQuery(document).ready(function () {
 
+            jQuery.validator.addMethod("confirmPassword", function(value, element) {
+                return jQuery('#userPassword').val() === jQuery('#confirmPassword').val();
+            }, "The password does not match");
+
             // hook up event handlers
             jQuery("#usersLink").click(function () {
                 selectNavItemActive(this);

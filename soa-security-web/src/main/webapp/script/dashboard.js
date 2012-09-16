@@ -202,7 +202,7 @@ function showWebServiceDialog(title, formName) {
         "                <label class='control-label' for='serviceUrl'>Service url</label>" +
 
         "                <div class='controls'>" +
-        "                    <input id='serviceUrl' name='serviceUrl' type='text' class='required'" +
+        "                    <input id='serviceUrl' name='serviceUrl' type='text' class='required serviceUrl'" +
         "                           placeholder='/ServiceUrl'/>" +
         "                </div>" +
         "            </div>" +
@@ -243,7 +243,7 @@ function showWebServiceDialog(title, formName) {
         "                            <label class='control-label' for='userDataSources'>Data source</label>" +
 
         "                            <div class='controls'>" +
-        "                                <select id='userDataSources'></select>" +
+        "                                <select id='userDataSources' class='required'></select>" +
         "                            </div>" +
         "                        </div>" +
         "                    </div>" +
@@ -251,19 +251,19 @@ function showWebServiceDialog(title, formName) {
         "                        <div class='control-group'>" +
         "                            <label class='control-label' for='userKeyStores'>Key store</label>" +
         "                            <div class='controls'>" +
-        "                                <select id='userKeyStores'></select>" +
+        "                                <select id='userKeyStores' class='required'></select>" +
         "                            </div>" +
         "                        </div>" +
         "                        <div class='control-group'>" +
         "                            <label class='control-label' for='clientAlias'>Client alias</label>" +
         "                            <div class='controls'>" +
-        "                                <select id='clientAlias'></select>" +
+        "                                <select id='clientAlias' class='required'></select>" +
         "                            </div>" +
         "                        </div>" +
         "                        <div class='control-group'>" +
         "                            <label class='control-label' for='serverAlias'>Server alias</label>" +
         "                            <div class='controls'>" +
-        "                                <select id='serverAlias'></select>" +
+        "                                <select id='serverAlias' class='required'></select>" +
         "                            </div>" +
         "                        </div>" +
         "                    </div>" +

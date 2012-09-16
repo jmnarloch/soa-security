@@ -65,7 +65,7 @@ function showUserDialog(title, formName) {
         "                <div class='control-group'>" +
         "                    <label class='control-label' for='confirmPassword'>Confirm password</label>" +
         "                    <div class='controls'>" +
-        "                        <input id='confirmPassword' type='password'>" +
+        "                        <input id='confirmPassword' type='password' class='required confirmPassword'>" +
         "                    </div>" +
         "                </div>" +
         "                <div class='control-group'>" +

@@ -117,21 +117,36 @@ function initWebServiceModal() {
 
         securityType = jQuery('#webServiceSecurityType').val();
 
+        var isValid = true;
         if (securityType == 8 || securityType == 9) {
 
-            securityList.add(createDatabaseSecurity());
+            jQuery('#dataSourceConfiguration').wrap('<form />').parent().validate();
+            isValid = jQuery('#dataSourceConfiguration').parent().valid();
+            jQuery('#dataSourceConfiguration').unwrap();
+
+            if (isValid) {
+                securityList.add(createDatabaseSecurity());
+            }
         } else if (securityType == 10 || securityType == 11) {
 
-            securityList.add(createKeyStoreSecurity());
+            jQuery('#keyStoreConfiguration').wrap('<form />').parent().validate();
+            isValid = jQuery('#keyStoreConfiguration').parent().valid();
+            jQuery('#keyStoreConfiguration').unwrap();
+
+            if (isValid) {
+                securityList.add(createKeyStoreSecurity());
+            }
         }
 
-        securityList.display('#securityConfigurationList');
+        if (isValid) {
+            securityList.display('#securityConfigurationList');
 
-        // hides the options
-        hide('#dataSourceConfiguration');
-        hide('#keyStoreConfiguration');
-        hide('#securityConfigurationOptions');
-        show('#addNewSecurityConfiguration');
+            // hides the options
+            hide('#dataSourceConfiguration');
+            hide('#keyStoreConfiguration');
+            hide('#securityConfigurationOptions');
+            show('#addNewSecurityConfiguration');
+        }
 
         // prevents from form post
         return false;
@@ -146,7 +161,7 @@ function editService(id) {
     showWebServiceDialog('Add web service', 'editWSService').on({show:function () {
 
         // temporary make all ajax request synchronous
-        jQuery.ajaxSetup({async: false});
+        jQuery.ajaxSetup({async:false});
         try {
             initWebServiceModal();
 
@@ -161,7 +176,7 @@ function editService(id) {
 
                 if (data.securityEnabled) {
 
-                    jQuery.each(data.serviceSecurities, function(index, value) {
+                    jQuery.each(data.serviceSecurities, function (index, value) {
 
                         securityList.add(value);
                     });
@@ -171,7 +186,7 @@ function editService(id) {
             });
         } finally {
 
-            jQuery.ajaxSetup({async: true});
+            jQuery.ajaxSetup({async:true});
         }
     }, hidden:function () {
         jQuery(this).remove();
@@ -196,7 +211,7 @@ function editService(id) {
 
                 jQuery('.modal').modal('hide');
                 displayServices();
-                showSuccessAlert("The service has been successfully created");
+                showSuccessAlert("The service has been successfully updated");
             }).error(defaultAjaxErrorHandler);
         }
 
@@ -328,6 +343,10 @@ function createKeyStoreSecurity() {
 }
 
 jQuery(document).ready(function () {
+
+    jQuery.validator.addMethod("serviceUrl", function (value, element) {
+        return /^\/.+/.test(value);
+    }, "The service url must be proceeded with '/'");
 
     // hook up event handlers
     jQuery("#servicesLink").click(function () {

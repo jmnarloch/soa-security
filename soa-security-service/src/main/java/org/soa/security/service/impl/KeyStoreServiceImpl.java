@@ -96,7 +96,6 @@ public class KeyStoreServiceImpl implements KeyStoreService {
             keyStore.setKeyStoreFile(new KeyStoreFile());
             keyStore.getKeyStoreFile().setContent(keyStoreContent);
 
-            // TODO retrieve the key store aliases
             keyStore.setKeyStoreAliases(getKeyStoreAliases(keyStore, keyStoreContent));
 
             // updates the key store
